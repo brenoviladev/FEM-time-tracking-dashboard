@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import "./app.css";
+import data from "./utils/data.json";
+import { cardImgs, menuIcon } from "./assets/images/index";
+
+import Card from "./components/Card/Card";
+import UserCard from "./components/userCard/UserCard";
+
+const App = () => {
+	const [frequency, setFrequency] = useState("weekly");
+
+	const toggleTimeFrames = newFreq => {
+		document.getElementsByClassName(frequency)[0].classList.remove("active");
+		setFrequency(newFreq);
+		document.getElementsByClassName(newFreq)[0].classList.add("active");
+	};
+
+	const cardElements = data.map(({ title, timeframes }, i) => (
+		<Card
+			key={i}
+			title={title}
+			menuIcon={menuIcon}
+			cardImg={cardImgs[i]}
+			timeframes={timeframes[frequency]}
+		/>
+	));
+
+	return (
+		<main>
+			<UserCard toggleTimeFrames={toggleTimeFrames} />
+			{cardElements}
+		</main>
+	);
+};
 
 export default App;
